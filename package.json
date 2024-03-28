@@ -1,7 +1,7 @@
 {
   "name": "denkovi",
-  "version": "1.0.0",
-  "description": "Controll of the rele board denkovi",
+  "version": "1.0.1",
+  "description": "Easily manage and manipulate Denkovi relay boards through your Node.js applications.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,11 @@
     "releBoard",
     "domotic"
   ],
-  "author": "",
+  "author": {
+    "name": "Luca Serafini",
+    "email": "lucaserafinidev@gmail.com",
+    "url": "https://github.com/serafiniluca"
+  },
   "license": "MIT",
   "dependencies": {
     "net-snmp": "^3.11.0"

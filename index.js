@@ -16,12 +16,12 @@ class Denkovi {
   #user;
   #port;
 
-  constructor(model, ip, port = 161, user = "admin", password = "private") {
-    this.#ip = ip;
-    this.#model = model;
-    this.#password = password;
-    this.#user = user;
-    this.#port = port;
+  constructor(options) {
+    this.#ip = options.ip;
+    this.#model = options.model;
+    this.#password = options.password || "private";
+    this.#user = options.user || "admin";
+    this.#port = options.port || 161;
   }
 
   #snmpGet = (oids, callback) => {

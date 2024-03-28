@@ -1,6 +1,6 @@
 {
   "name": "denkovi",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Easily manage and manipulate Denkovi relay boards through your Node.js applications.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/serafiniluca/denkovi"
+    "url": "git+https://github.com/serafiniluca/denkovi.git"
   }
 }

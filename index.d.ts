@@ -1,16 +1,22 @@
-declare module 'denkovi' {
-  export interface DenkoviOptions {
+declare module 'Denkovi' {
+  interface Pin {
+    name: string;
+    value: number;
+    id: number;
+  }
+
+  interface DenkoviOptions {
     ip: string;
-    model: 'datnetip' | 'smartdenIO' | 'smartden';
+    port?: number;
     password?: string;
     user?: string;
-    port?: number;
+    model: 'datnetip' | 'smartden';
   }
 
   export class Denkovi {
     constructor(options: DenkoviOptions);
-    getStates(): Promise<any>;
-    getState(out: number): Promise<any>;
-    setOut(out: number, value: 1 | 0, statusPrint?: boolean): Promise<any>;
+    getStates(): Promise<Pin[]>;
+    getState(out: number): Promise<Pin>;
+    setState(out: number, value: 1 | 0, statusPrint?: boolean): Promise<any>;
   }
 }

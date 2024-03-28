@@ -59,15 +59,6 @@ class Denkovi {
     });
   };
 
-  #createJsonRespond = (name, varbinds) => {
-    let jsonTxt = `"${name}":`;
-    for (const varbind of varbinds) {
-      jsonTxt += `"${varbind.value.toString()}",`;
-    }
-    jsonTxt = jsonTxt.slice(0, -1); // Rimuovi l'ultima virgola
-    return jsonTxt;
-  };
-
   getStates() {
     const getPinsState = (pinPrefix, pinStart, pinCount) => {
       const pins = [];
@@ -79,7 +70,7 @@ class Denkovi {
             if (error) {
               reject(error);
             } else {
-              resolve(this.#createJsonRespond(`${oids.name}_${i + pinStart}`, varbinds));
+              resolve({ name: `${oids.name}_${i + pinStart}`, value: varbinds[0].value, id: i + pinStart });
             }
           });
         }));
@@ -94,7 +85,7 @@ class Denkovi {
           if (error) {
             reject(error);
           } else {
-            resolve(this.#createJsonRespond(oids.name, varbinds));
+            resolve({ name: oids.name, value: varbinds[0].value, });
           }
         });
       });
@@ -108,13 +99,17 @@ class Denkovi {
         promises.push(getDirState("p5_dir"));  */
 
     return Promise.all(promises).then((results) => {
-      const jsonRespond = JSON.parse(`{${results.join(",")}}`);
-      return jsonRespond;
+
+      const data = results.flat();
+      return data;
     }).catch(error => {
       throw new Error("Error: " + error);
     });
   }
   getState(out) {
+    if (out > 16 || out < 1) {
+      throw new Error("Error: the digital output are from pin 1 to 16");
+    }
     const pinPrefix = out <= 8 ? "p3" : "p5";
     const pinNumber = out <= 8 ? out : out - 8;
     const oid = PIN_OIDS.find(el => el.name == pinPrefix);
@@ -124,13 +119,16 @@ class Denkovi {
         if (error) {
           reject(error);
         } else {
-          resolve(JSON.parse(`{${this.#createJsonRespond(`${oid.name}_${out}`, varbinds)}}`));
+          resolve({ name: `${oid.name}_${out}`, value: varbinds[0].value, id: out });
         }
       });
     });
 
   }
-  setOut(out, value, status = true) {
+  setOut(out, value, statusPrint = true) {
+    if (out > 16 || out < 1) {
+      throw new Error("Error: the digital output are from pin 1 to 16");
+    }
     const pinPrefix = out <= 8 ? "p3" : "p5";
     const pinNumber = out <= 8 ? out : out - 8;
     const oid = PIN_OIDS.find(el => el.name == pinPrefix);
@@ -139,7 +137,7 @@ class Denkovi {
       this.#snmpSet(url, value, (error, varbinds) => {
         if (error) {
           reject(new Error("Error: " + error));
-        } else if (status) {
+        } else if (statusPrint) {
           try {
             resolve(this.getState(out));
           } catch (err) {

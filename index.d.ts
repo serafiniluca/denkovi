@@ -1,7 +1,7 @@
 declare module 'denkovi' {
   export interface DenkoviOptions {
     ip: string;
-    model: 'datnetip' | 'smartden';
+    model: 'datnetip' | 'smartdenIO' | 'smartden';
     password?: string;
     user?: string;
     port?: number;
@@ -11,6 +11,6 @@ declare module 'denkovi' {
     constructor(options: DenkoviOptions);
     getStates(): Promise<any>;
     getState(out: number): Promise<any>;
-    setOut(out: number, value: number, status?: boolean): Promise<any>;
+    setOut(out: number, value: 1 | 0, statusPrint?: boolean): Promise<any>;
   }
 }

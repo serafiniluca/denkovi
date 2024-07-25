@@ -14,7 +14,7 @@ class Denkovi {
     this.#port = options.port;
     this.#password = options.password;
     this.#user = options.user;
-    this.#timeout = opacity.timeout,
+    this.#timeout = options.timeout,
       this.#model = options.model.toLowerCase();
     if (this.#model === 'datnetip') {
       this.#denkovi = new datnetip({ ip: this.#ip, port: this.#port, password: this.#password, timeout: this.#timeout });

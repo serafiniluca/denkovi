@@ -1,9 +1,9 @@
-const { Denkovi } = require("denkovi");
+const { Denkovi } = require("../");
 
-const releBoard = new Denkovi({ model: "datnetip", ip: "192.168.0.51" });
+const releBoard = new Denkovi({ model: "datnetip", ip: "192.168.0.60"});
 
 const Getstate = async () => {
-  const status = await releBoard.getState(1);
+  const status = await releBoard.getState(1, "p3");
   console.log(status);
 };
 const Getstates = async () => {
@@ -11,7 +11,7 @@ const Getstates = async () => {
   console.log(status);
 };
 const setState = async () => {
-  const status = await releBoard.setState(1, 0);
+  const status = await releBoard.setState(1, "p3", 0);
   console.log(status);
 };
 
@@ -21,7 +21,7 @@ setState();
 
 
 
-const releBoard2 = new Denkovi({ model: "smartden", ip: "192.168.0.52" });
+const releBoard2 = new Denkovi({ model: "smartden", ip: "192.168.0.60", timeout: 200 });
 
 const Getstate2 = async () => {
   const status = await releBoard2.getState(1);

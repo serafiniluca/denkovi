@@ -1,6 +1,6 @@
 {
   "name": "denkovi",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Easily manage and manipulate Denkovi relay boards through your Node.js applications.",
   "main": "index.js",
   "scripts": {

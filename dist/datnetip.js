@@ -14,19 +14,21 @@ class Denkovi {
   #password;
   #user;
   #port;
+  #timeout;
 
   constructor(options) {
     this.#ip = options.ip;
     this.#password = options.password || "private";
     this.#user = options.user || "admin";
     this.#port = options.port || 161;
+    this.#timeout = options.timeout || 5000;
   }
 
   #snmpGet = (oids, callback) => {
     const options = {
       port: parseInt(this.#port),
       retries: 1,
-      timeout: 5000,
+      timeout: this.#timeout,
       transport: "udp4",
       trapPort: 163,
       version: snmp.Version1
@@ -41,7 +43,7 @@ class Denkovi {
     const options = {
       port: parseInt(this.#port),
       retries: 1,
-      timeout: 5000,
+      timeout: this.#timeout,
       transport: "udp4",
       trapPort: 163,
       version: snmp.Version1
@@ -104,14 +106,15 @@ class Denkovi {
       throw new Error("Error: " + error);
     });
   }
-  getState(out) {
-    if (out > 16 || out < 1) {
-      throw new Error("Error: the digital output are from pin 1 to 16");
+  getState(out, port) {
+    if (out > 8 || out < 1) {
+      throw new Error("Error: the digital output are from pin 1 to 8");
     }
-    const pinPrefix = out <= 8 ? "p3" : "p5";
-    const pinNumber = out <= 8 ? out : out - 8;
-    const oid = PIN_OIDS.find(el => el.name == pinPrefix);
-    const url = `${oid.url}.${pinNumber}.0`;
+    const oid = PIN_OIDS.find(el => el.name == port);
+    if (!oid) {
+      throw new Error("Port not valid");
+    }
+    const url = `${oid.url}.${out}.0`;
     return new Promise((resolve, reject) => {
       this.#snmpGet([url], (error, varbinds) => {
         if (error) {
@@ -123,21 +126,22 @@ class Denkovi {
     });
 
   }
-  setState(out, value, statusPrint = true) {
-    if (out > 16 || out < 1) {
-      throw new Error("Error: the digital output are from pin 1 to 16");
+  setState(out, port, value, statusPrint = true) {
+    if (out > 8 || out < 1) {
+      throw new Error("Error: the digital output are from pin 1 to 8");
     }
-    const pinPrefix = out <= 8 ? "p3" : "p5";
-    const pinNumber = out <= 8 ? out : out - 8;
-    const oid = PIN_OIDS.find(el => el.name == pinPrefix);
-    const url = `${oid.url}.${pinNumber}.0`;
+    const oid = PIN_OIDS.find(el => el.name == port);
+    if (!oid) {
+      throw new Error("Port not valid");
+    }
+    const url = `${oid.url}.${out}.0`;
     return new Promise((resolve, reject) => {
       this.#snmpSet(url, value, (error, varbinds) => {
         if (error) {
           reject(new Error("Error: " + error));
         } else if (statusPrint) {
           try {
-            resolve(this.getState(out));
+            resolve(this.getState(out, port));
           } catch (err) {
             reject(err);
           }

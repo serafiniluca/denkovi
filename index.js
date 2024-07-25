@@ -7,15 +7,17 @@ class Denkovi {
   #user;
   #port;
   #model;
+  #timeout;
   #denkovi;
   constructor(options) {
     this.#ip = options.ip;
     this.#port = options.port;
     this.#password = options.password;
     this.#user = options.user;
-    this.#model = options.model.toLowerCase();
+    this.#timeout = opacity.timeout,
+      this.#model = options.model.toLowerCase();
     if (this.#model === 'datnetip') {
-      this.#denkovi = new datnetip({ ip: this.#ip, port: this.#port, password: this.#password });
+      this.#denkovi = new datnetip({ ip: this.#ip, port: this.#port, password: this.#password, timeout: this.#timeout });
     } else if (this.#model === 'smartden') {
       this.#denkovi = new smartden({ ip: this.#ip, port: this.#port, password: this.#password });
     } else {
@@ -26,11 +28,11 @@ class Denkovi {
   async getStates() {
     return this.#denkovi.getStates();
   }
-  async getState(out) {
-    return this.#denkovi.getState(out);
+  async getState(out, port) {
+    return this.#denkovi.getState(out, port);
   }
-  async setState(out, value) {
-    return this.#denkovi.setState(out, value);
+  async setState(out, port, value) {
+    return this.#denkovi.setState(out, port, value);
   }
 }
 
